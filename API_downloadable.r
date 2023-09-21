@@ -18,18 +18,18 @@ WB_list <- c(
   "International tourism, receipts"
 )
 
-# Start and end dates
-start_date <- 2000
-end_date <- 2023
+# Start and end dates for World Bank data
+start_date_WB <- 2000
+end_date_WB <- 2023
 
-# Create a directory to store the CSV files
-output_dir <- "country_data/raw_data/World Bank/"
-dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
+# Create a directory to store the World Bank CSV files
+output_dir_WB <- "country_data/raw_data/World Bank/"
+dir.create(output_dir_WB, showWarnings = FALSE, recursive = TRUE)
 
-# Initialize an empty list to store dataframes
-dataframes <- list()
+# Initialize an empty list to store dataframes for World Bank data
+dataframes_WB <- list()
 
-# Loop through the indicator list
+# Loop through the World Bank indicator list
 for (indicator_name in WB_list) {
   # Search for the indicator
   indicator <- wb_search(indicator_name)
@@ -40,25 +40,26 @@ for (indicator_name in WB_list) {
     indicator <- indicator[1, ]
     
     # Download the data for the indicator
-    df <- wb_data(indicator$indicator_id, start_date = start_date, end_date = end_date)
+    df <- wb_data(indicator$indicator_id, start_date = start_date_WB, end_date = end_date_WB)
     
     # Add the data to the list of dataframes
-    dataframes[[indicator_name]] <- df
+    dataframes_WB[[indicator_name]] <- df
     
   } else {
     cat("Indicator not found:", indicator_name, "\n")
   }
 }
 
-# Save each dataframe as a separate CSV file
-for (indicator_name in names(dataframes)) {
-  df <- dataframes[[indicator_name]]
-  filename <- file.path(output_dir, paste0("WB_", indicator_name, ".csv"))
+# Save each dataframe as a separate CSV file for World Bank data
+for (indicator_name in names(dataframes_WB)) {
+  df <- dataframes_WB[[indicator_name]]
+  filename <- file.path(output_dir_WB, paste0("WB_", indicator_name, ".csv"))
   write.csv(df, filename)
-  cat("Data saved as", filename, "\n")
+  cat("World Bank Data saved as", filename, "\n")
 }
 
-# Optionally, you can also save a combined CSV file if needed
-	#combined_data <- do.call(rbind, dataframes)
-	#write.csv(combined_data, file.path(output_dir, "Combined_WB_Data.csv"))
-	#cat("Combined data saved as Combined_WB_Data.csv\n")
+# WHO API Package
+library(httr)
+library(jsonlite)
+
+

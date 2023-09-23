@@ -3,6 +3,7 @@ if (!require(wbstats)) {
   install.packages("wbstats")
   library(wbstats)
 }
+
 # here is how to find indicator id btw
 # https://data.worldbank.org/
 
@@ -61,5 +62,13 @@ for (indicator_name in names(dataframes_WB)) {
 # WHO API Package
 library(httr)
 library(jsonlite)
+if (!require(XML)) {
+  install.packages("XML")
+  library(XML)
+}
 
-
+# Creating the api link (the link is )
+who.api <- "http://apps.who.int/gho/athena/api/GHO/RSUDHWF"
+response <- GET(who.api, query = list(start_date = "2000", end_date = "2021"))
+who.data <- content(response, "text")
+who.data.1 <- xmlParse(who.data)
